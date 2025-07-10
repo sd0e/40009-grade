@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>40009 Percentage</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            input[type=number] {
+                -moz-appearance: textfield;
+            }
+        </style>
+    </head>
+    <body style="padding: 2rem;" onload="loaded();">
+        <script defer>
+            const weightings = {
+                "hit": 0.05,
+                "hft": 0.25,
+                "kit": 0.05,
+                "kft": 0.35,
+                "cft": 0.12,
+                "cgp-interim": 0.01,
+                "cgp-report": 0.03,
+                "cgp-extension": 0.02,
+                "cgp-presentation": 0.01,
+                "cgp-feedback": 0.01,
+                "ethics-video": 0.05,
+                "ethics-summary": 0.05,
+            }
+
+            function loaded() {
+                for (let i = 0; i < Object.keys(weightings).length; i++) {
+                    const weighting = Object.keys(weightings)[i];
+                    const val = weightings[weighting];
+
+                    document.getElementById(weighting + "-weighting").innerText = val;
+                }
+            }
+
+            function calculate() {
+                let percentage = 0;
+
+                for (let i = 0; i < Object.keys(weightings).length; i++) {
+                    const weighting = Object.keys(weightings)[i];
+                    const val = weightings[weighting];
+
+                    const enteredValue = Number(document.getElementById(weighting).value);
+
+                    // if (enteredValue == 0) {
+                    //     window.alert(`Warning: you have entered 0 for ${weighting}`);
+                    // }
+
+                    console.log(`${weighting}: ${enteredValue}`);
+                    
+                    if (weighting === "cgp-extension") {
+                        percentage += (enteredValue / Number(document.getElementById("cgp-extension-out-of").value)) * val;
+                    } else if (weighting === "hit") {
+                        percentage += (enteredValue / 20) * val;
+                    } else if (weighting === "hft") {
+                        percentage += (enteredValue / 30) * val;
+                    } else {
+                        percentage += (enteredValue / 100) * val;
+                    }
+                }
+
+                percentage *= 100;
+
+                document.getElementById('percentage').innerText = percentage.toFixed(2);
+
+                document.getElementById('result').style.display = "block";
+            }
+        </script>
+        <h1>40009 Percentage</h1>
+        <small>Disclaimer: There may be errors with the calculation, use at your own risk</small>
+        <table style="border-spacing: 1rem; border-collapse: separate;">
+            <tr>
+                <th>Exercise</th>
+                <th>Mark</th>
+                <th>Weighting</th>
+            </tr>
+            <tr>
+                <td>Haskell Interim Test</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="hit" />
+                        <p>/</p>
+                        <input type="number" value="20" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="hit-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>Haskell Final Test</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="hft" />
+                        <p>/</p>
+                        <input type="number" value="30" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="hft-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>Ethics Video Presentation</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="ethics-video" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="ethics-video-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>Ethics Summary</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="ethics-summary" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="ethics-summary-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>Kotlin Interim Test</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="kit" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="kit-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>Kotlin Final Test</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="kft" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="kft-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>CGP Interim Checkpoint</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cgp-interim" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cgp-interim-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>C Final Test</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cft" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cft-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>CGP Report + Source</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cgp-report" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cgp-report-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="margin: 1rem 0;">
+                        <span style="display: block;">CGP Extension or Architecture CW</span>
+                        <small>(change out of mark if JMC)</small>
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cgp-extension" />
+                        <p>/</p>
+                        <input type="number" value="100" style="width: 4rem;" id="cgp-extension-out-of" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cgp-extension-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>CGP Presentation</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cgp-presentation" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cgp-presentation-weighting"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>CGP Feedback</td>
+                <td>
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <input type="number" style="width: 4rem;" id="cgp-feedback" />
+                        <p>/</p>
+                        <input type="number" value="100" disabled style="width: 4rem;" />
+                    </div>
+                </td>
+                <td>
+                    <p id="cgp-feedback-weighting"></p>
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="Calculate" class="btn btn-primary" onclick="calculate();" />
+        <div id="result" class="card text-white bg-primary" style="width: 20rem; margin-top: 4rem; display: none;">
+            <div class="card-header">
+                <h4>Mark (rounded to 2dp)</h4>
+            </div>
+            <div class="card-body">
+                <h4><span id="percentage"></span>%</h4>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    </body>
+</html>
