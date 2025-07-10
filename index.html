@@ -46,6 +46,9 @@
             function calculate() {
                 let percentage = 0;
 
+                let kit = 0;
+                let kft = 0;
+
                 for (let i = 0; i < Object.keys(weightings).length; i++) {
                     const weighting = Object.keys(weightings)[i];
                     const val = weightings[weighting];
@@ -64,9 +67,28 @@
                         percentage += (enteredValue / 20) * val;
                     } else if (weighting === "hft") {
                         percentage += (enteredValue / 30) * val;
+                    } else if (weighting === "kit") {
+                        kit = enteredValue / 100;
+                    } else if (weighting === "kft") {
+                        kft = enteredValue / 100;
                     } else {
                         percentage += (enteredValue / 100) * val;
                     }
+                }
+
+                let alpha = kit * weightings["kit"] + kft * weightings["kft"];
+                let beta = kft * 0.40;
+
+                if (alpha >= beta) {
+                    document.getElementById('other-mark').innerText = ((percentage + beta) * 100).toFixed(2);
+                    document.getElementById('other-non-detriment').innerText = "β";
+                    percentage += alpha;
+                    document.getElementById('non-detriment').innerText = "α (KIT*5% + KFT*35%)";
+                } else {
+                    document.getElementById('other-mark').innerText = ((percentage + alpha) * 100).toFixed(2);
+                    document.getElementById('other-non-detriment').innerText = "α";
+                    percentage += beta;
+                    document.getElementById('non-detriment').innerText = "β (KFT*40%)";
                 }
 
                 percentage *= 100;
@@ -248,12 +270,15 @@
             </tr>
         </table>
         <input type="button" value="Calculate" class="btn btn-primary" onclick="calculate();" />
-        <div id="result" class="card text-white bg-primary" style="width: 20rem; margin-top: 4rem; display: none;">
+        <div id="result" class="card text-white bg-primary" style="width: 50rem; margin-top: 4rem; display: none;">
             <div class="card-header">
                 <h4>Mark (rounded to 2dp)</h4>
             </div>
             <div class="card-body">
                 <h4><span id="percentage"></span>%</h4>
+
+                <p>Higher non-detriment mark taken from <span id="non-detriment"></span></p>
+                <small>(percentage with <span id="other-non-detriment"></span> is <span id="other-mark"></span>%)</small>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
